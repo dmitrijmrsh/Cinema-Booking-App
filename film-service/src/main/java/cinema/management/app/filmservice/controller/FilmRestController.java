@@ -1,9 +1,7 @@
 package cinema.management.app.filmservice.controller;
 
-import cinema.management.app.filmservice.dto.CreatedFilmDto;
-import cinema.management.app.filmservice.dto.FilmRequestDto;
-import cinema.management.app.filmservice.dto.FilmResponseDto;
-import cinema.management.app.filmservice.entity.enums.FilmCategory;
+import cinema.management.app.filmservice.dto.request.FilmUpdateRequestDto;
+import cinema.management.app.filmservice.dto.response.FilmResponseDto;
 import cinema.management.app.filmservice.service.FilmService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -12,18 +10,22 @@ import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
-@RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/films")
+@RestController
+@RequestMapping("/api/v1/films/{filmId:\\d+}")
 public class FilmRestController {
 
     private final FilmService filmService;
 
-    @PostMapping
-    public ResponseEntity<?> saveFilm(
-            @Valid @RequestBody FilmRequestDto filmRequestDto,
+    @GetMapping
+    public FilmResponseDto findFilmById(@PathVariable("filmId") Integer id) {
+        return filmService.findFilmById(id);
+    }
+
+    @PutMapping
+    public ResponseEntity<?> updateFilmById(
+            @PathVariable("filmId") Integer id,
+            @Valid @RequestBody FilmUpdateRequestDto dto,
             BindingResult bindingResult
     ) throws BindException {
 
@@ -35,36 +37,16 @@ public class FilmRestController {
             throw new BindException(bindingResult);
         }
 
-        CreatedFilmDto createdFilmDto = filmService.save(filmRequestDto);
+        FilmResponseDto responseDto = filmService.updateFilm(id, dto);
 
         return ResponseEntity.ok()
-                .body(createdFilmDto);
+                .body(responseDto);
     }
 
-    @GetMapping
-    public ResponseEntity<?> findAllFilms() {
-        List<FilmResponseDto> allFilms = filmService.findAll();
-        return ResponseEntity.ok()
-                .body(allFilms);
-    }
-
-    @GetMapping("/{id:\\d+}")
-    public FilmResponseDto findFilmById(@PathVariable("id") Long id) {
-        return filmService.findById(id);
-    }
-
-    @GetMapping("category")
-    public ResponseEntity<?> getFilmsByCategory(@RequestParam("category")FilmCategory filmCategory) {
-        List<FilmResponseDto> films = filmService.findByCategory(filmCategory);
-        return ResponseEntity.ok()
-                .body(films);
-    }
-
-    @DeleteMapping("{id:\\d+}")
-    public ResponseEntity<?> deleteFilm(@PathVariable("id") Long id) {
-        filmService.delete(id);
+    @DeleteMapping
+    public ResponseEntity<?> deleteFilmById(@PathVariable("filmId") Integer id) {
+        filmService.deleteFilm(id);
         return ResponseEntity.noContent()
                 .build();
     }
-
 }

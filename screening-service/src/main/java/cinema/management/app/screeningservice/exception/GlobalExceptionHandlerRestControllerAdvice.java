@@ -1,6 +1,7 @@
 package cinema.management.app.screeningservice.exception;
 
 import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.factory.parsing.Problem;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
@@ -17,15 +18,14 @@ public class GlobalExceptionHandlerRestControllerAdvice {
 
     @ExceptionHandler(BindException.class)
     public ResponseEntity<ProblemDetail> handleBindException(BindException exception) {
-        ProblemDetail problemDetail = ProblemDetail
-                .forStatusAndDetail(HttpStatus.BAD_REQUEST, exception.getMessage());
+        ProblemDetail problemDetail = ProblemDetail.forStatus(HttpStatus.BAD_REQUEST);
 
         problemDetail.setProperty("errors",
                 exception.getAllErrors().stream()
                         .map(ObjectError::getDefaultMessage)
                         .toList());
 
-        log.info(exception.getMessage());
+        log.info("Bind exception: {}", exception.getMessage());
 
         return ResponseEntity.badRequest()
                 .body(problemDetail);
@@ -33,12 +33,11 @@ public class GlobalExceptionHandlerRestControllerAdvice {
 
     @ExceptionHandler(CustomException.class)
     public ResponseEntity<ProblemDetail> handleCustomException(CustomException exception) {
-        ProblemDetail problemDetail = ProblemDetail
-                .forStatusAndDetail(exception.getHttpStatus(), exception.getMessage());
+        ProblemDetail problemDetail = ProblemDetail.forStatus(exception.getHttpStatus());
 
         problemDetail.setProperty("errors", List.of(exception.getMessage()));
 
-        log.info(exception.getMessage());
+        log.info("Custom exception: {}", exception.getMessage());
 
         return ResponseEntity.status(exception.getHttpStatus())
                 .body(problemDetail);

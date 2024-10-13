@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <changeSet id="1" author="dmitrijmrsh">
+        <sql>
+            INSERT INTO screening (date, time, film_id, hall_id)
+            VALUES ('2024-10-05', '13:00:00', 1, 5),
+                   ('2024-10-06', '13:00:00', 2, 6),
+                   ('2024-10-07', '13:00:00', 3, 7),
+                   ('2024-10-08', '13:00:00', 4, 5),
+                   ('2024-10-09', '13:00:00', 5, 6);
+        </sql>
+    </changeSet>
+
+
+</databaseChangeLog>

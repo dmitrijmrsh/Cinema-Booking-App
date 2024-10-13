@@ -1,6 +1,6 @@
 package cinema.management.app.screeningservice.client;
 
-import cinema.management.app.filmservice.entity.Film;
+import cinema.management.app.screeningservice.dto.response.FilmDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -9,6 +9,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 public interface FilmClient {
 
     @GetMapping("{id:\\d+}")
-    Film findFilmById(@PathVariable("id") Long id);
+    FilmDto findFilmById(@PathVariable("id") Integer id);
 
 }

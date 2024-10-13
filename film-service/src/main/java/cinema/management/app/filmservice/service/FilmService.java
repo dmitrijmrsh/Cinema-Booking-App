@@ -1,21 +1,23 @@
 package cinema.management.app.filmservice.service;
 
-import cinema.management.app.filmservice.dto.CreatedFilmDto;
-import cinema.management.app.filmservice.dto.FilmRequestDto;
-import cinema.management.app.filmservice.dto.FilmResponseDto;
-import cinema.management.app.filmservice.entity.enums.FilmCategory;
+import cinema.management.app.filmservice.dto.request.FilmCreationRequestDto;
+import cinema.management.app.filmservice.dto.request.FilmUpdateRequestDto;
+import cinema.management.app.filmservice.dto.response.FilmResponseDto;
 
 import java.util.List;
 
 public interface FilmService {
 
-    CreatedFilmDto save(FilmRequestDto filmRequestDto);
+    List<FilmResponseDto> findAllFilms();
 
-    FilmResponseDto findById(Long id);
+    List<FilmResponseDto> findFilmByGenre(String genreName);
 
-    List<FilmResponseDto> findAll();
+    FilmResponseDto findFilmById(Integer id);
 
-    List<FilmResponseDto> findByCategory(FilmCategory filmCategory);
+    FilmResponseDto saveFilm(FilmCreationRequestDto dto);
 
-    void delete(Long id);
+    FilmResponseDto updateFilm(Integer id, FilmUpdateRequestDto dto);
+
+    void deleteFilm(Integer id);
+
 }

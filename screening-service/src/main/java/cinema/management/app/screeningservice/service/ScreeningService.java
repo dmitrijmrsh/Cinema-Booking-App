@@ -1,22 +1,23 @@
 package cinema.management.app.screeningservice.service;
 
-import cinema.management.app.screeningservice.dto.ScreeningAvailableSeatsDto;
-import cinema.management.app.screeningservice.dto.ScreeningRequestDto;
-import cinema.management.app.screeningservice.dto.ScreeningResponseDto;
-import cinema.management.app.screeningservice.dto.SeatReservingRequestDto;
+import cinema.management.app.screeningservice.dto.request.ScreeningCreationRequestDto;
+import cinema.management.app.screeningservice.dto.response.ScreeningResponseDto;
 
 import java.time.LocalDate;
 import java.util.List;
 
 public interface ScreeningService {
 
-    ScreeningResponseDto saveScreening(ScreeningRequestDto screeningRequestDto, Long filmId);
-
-    ScreeningResponseDto findScreeningById(Long screeningId);
+    List<ScreeningResponseDto> findAllScreenings();
 
     List<ScreeningResponseDto> findScreeningsByDate(LocalDate date);
 
-    ScreeningAvailableSeatsDto findAvailableSeats(Long screeningId);
+    List<ScreeningResponseDto> findScreeningsByFilmId(Integer id);
 
-    void reserveSeat(SeatReservingRequestDto seatReservingRequestDto);
+    ScreeningResponseDto findScreeningById(Integer id);
+
+    ScreeningResponseDto saveScreening(ScreeningCreationRequestDto dto);
+
+    void deleteScreening(Integer id);
+
 }
