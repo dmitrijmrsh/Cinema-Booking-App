@@ -1,0 +1,49 @@
+databaseChangeLog:
+  - changeSet:
+      id: 20241207_create_tables
+      author: dmitriimrsh (generated)
+      comment: "Creates tables for users and roles"
+      changes:
+        - sqlFile:
+            path: 20241207_create_tables.sql
+            relativeToChangelogFile: true
+  - changeSet:
+      id: 20241207_create_views
+      author: dmitriimrsh (generated)
+      comment: "Creates views for users and roles"
+      changes:
+        - sqlFile:
+            path: 20241207_create_views.sql
+            relativeToChangelogFile: true
+  - changeSet:
+      id: 20241207_create_trigger_functions
+      author: dmitriimrsh (generated)
+      comment: "Creates triggers and trigger functions for users"
+      changes:
+        - sqlFile:
+            path: 20241207_create_trigger_functions.sql
+            relativeToChangelogFile: true
+  - changeSet:
+      id: 20241207_create_users_functions
+      author: dmitriimrsh (generated)
+      comment: "Creates functions for users"
+      changes:
+        - sqlFile:
+            path: 20241207_create_users_functions.sql
+            relativeToChangelogFile: true
+  - changeSet:
+      id: 20241207_create_roles_functions
+      author: dmitriimrsh (generated)
+      comment: "Creates functions for roles"
+      changes:
+        - sqlFile:
+            path: 20241207_create_roles_functions.sql
+            relativeToChangelogFile: true
+  - changeSet:
+      id: 20241207_add_roles
+      author: dmitriimrsh (generated)
+      comment: "Adding platform roles"
+      changes:
+        - sqlFile:
+            path: 20241207_add_roles.sql
+            relativeToChangelogFile: true

@@ -27,6 +27,12 @@ spring:
           predicates:
             - Path=/api/v1/halls/**
 
+security:
+  jwt:
+    token:
+      secret:
+        access: levc/guxCQY5xgOePnfbG52ZjB4Jn+PvZMK+DBxwBKHG3ODmlQQ8FBWO4juJkTJd1htUl82Io+LAz54kKbKmQw==
+
 management:
   tracing:
     sampling:
