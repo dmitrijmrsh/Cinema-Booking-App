@@ -2,7 +2,6 @@ package cinema.management.app.filmservice.service.impl;
 
 import cinema.management.app.filmservice.dto.request.GenreCreationRequestDto;
 import cinema.management.app.filmservice.dto.response.GenreResponseDto;
-import cinema.management.app.filmservice.entity.Genre;
 import cinema.management.app.filmservice.exception.CustomException;
 import cinema.management.app.filmservice.mapper.GenreMapper;
 import cinema.management.app.filmservice.repository.GenreRepository;
@@ -22,12 +21,13 @@ import java.util.List;
 @Service
 public class GenreServiceImpl implements GenreService {
 
+    private final MessageSource messageSource;
     private final GenreRepository genreRepository;
     private final GenreMapper genreMapper;
-    private final MessageSource messageSource;
 
     @Override
     public List<GenreResponseDto> findAllGenres() {
+        log.info("Getting genres list");
         return genreRepository.findAll().stream()
                 .map(genreMapper::entityToDto)
                 .toList();
@@ -35,34 +35,39 @@ public class GenreServiceImpl implements GenreService {
 
     @Override
     public GenreResponseDto findGenreById(Integer id) {
-        Genre genre = genreRepository.findById(id)
-                .orElseThrow(() -> new CustomException(messageSource.getMessage(
-                        "film.service.errors.genre.not.found",
-                        new Object[]{id},
-                        LocaleContextHolder.getLocale()
-                ), HttpStatus.NOT_FOUND));
-
-        log.info("Found genre with id {}", id);
-
-        return genreMapper.entityToDto(genre);
+        log.info("Getting genre with id: {}", id);
+        return genreRepository.findById(id)
+                .map(genreMapper::entityToDto)
+                .orElseThrow(() -> new CustomException(
+                        this.messageSource.getMessage(
+                                "film.service.errors.genre.not.found",
+                                new Object[]{id},
+                                LocaleContextHolder.getLocale()
+                        ),
+                        HttpStatus.NOT_FOUND
+                ));
     }
 
     @Override
     @Transactional
     public GenreResponseDto saveGenre(GenreCreationRequestDto dto) {
+        log.info("Saving genre with name: {}", dto.name());
+
         String genreName = dto.name();
 
         if (genreRepository.existsByName(genreName)) {
-            throw new CustomException(messageSource.getMessage(
-                    "film.service.errors.genre.already.exist",
-                    new Object[]{genreName},
-                    LocaleContextHolder.getLocale()
-            ), HttpStatus.UNPROCESSABLE_ENTITY);
+            throw new CustomException(
+                    this.messageSource.getMessage(
+                            "film.service.errors.genre.already.exist",
+                            new Object[]{genreName},
+                            LocaleContextHolder.getLocale()
+                    ),
+                    HttpStatus.CONFLICT
+            );
         }
 
-        Genre genre = genreRepository.save(genreMapper.dtoToEntity(dto));
-
-        return genreMapper.entityToDto(genre);
+        return genreMapper.entityToDto(
+                genreRepository.save(genreMapper.dtoToEntity(dto))
+        );
     }
-
 }

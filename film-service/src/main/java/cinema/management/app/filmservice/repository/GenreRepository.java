@@ -1,16 +1,20 @@
 package cinema.management.app.filmservice.repository;
 
 import cinema.management.app.filmservice.entity.Genre;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
-@Repository
-public interface GenreRepository extends JpaRepository<Genre, Integer> {
+public interface GenreRepository {
 
-    Optional<Genre> findByName(String name);
+    List<Genre> findAll();
 
-    boolean existsByName(String name);
+    Optional<Genre> findById(final Integer id);
+
+    Optional<Genre> findByName(final String name);
+
+    Boolean existsByName(final String name);
+
+    Genre save(final Genre genre);
 
 }

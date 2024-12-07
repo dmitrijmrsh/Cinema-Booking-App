@@ -13,7 +13,7 @@ public class GenreRestController {
     private final GenreService genreService;
 
     @GetMapping
-    public GenreResponseDto getGenre(@PathVariable("genreId") Integer id) {
+    public GenreResponseDto getGenre(@PathVariable("genreId") final Integer id) {
         return genreService.findGenreById(id);
     }
 

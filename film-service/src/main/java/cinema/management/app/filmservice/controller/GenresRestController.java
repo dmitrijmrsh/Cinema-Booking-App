@@ -27,7 +27,7 @@ public class GenresRestController {
 
     @PostMapping
     public ResponseEntity<?> createGenre(
-            @Valid @RequestBody GenreCreationRequestDto dto,
+            @Valid @RequestBody final GenreCreationRequestDto dto,
             BindingResult bindingResult
     ) throws BindException {
 
@@ -45,4 +45,5 @@ public class GenresRestController {
         return ResponseEntity.created(URI.create(entityURI))
                 .body(responseDto);
     }
+
 }

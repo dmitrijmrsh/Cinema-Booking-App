@@ -25,16 +25,16 @@ public class FilmsRestController {
         return filmService.findAllFilms();
     }
 
-    @GetMapping("/by_genre")
+    @GetMapping("/by-genre")
     public List<FilmResponseDto> findFilmsByCategory(
-            @RequestParam("genre") String genre
+            @RequestParam("genre") final String genre
     ) {
         return filmService.findFilmByGenre(genre);
     }
 
     @PostMapping
     public ResponseEntity<?> createFilm(
-            @Valid @RequestBody FilmCreationRequestDto dto,
+            @Valid @RequestBody final FilmCreationRequestDto dto,
             BindingResult bindingResult
     ) throws BindException {
 

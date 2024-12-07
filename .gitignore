@@ -1,1 +1,7 @@
-.idea
+.idea/
+api-gateway/target/
+config-server/target/
+eureka-server/target/
+film-service/target/
+hall-service/target/
+screening-service/target/

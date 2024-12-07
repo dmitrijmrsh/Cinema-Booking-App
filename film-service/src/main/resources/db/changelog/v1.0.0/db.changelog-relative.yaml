@@ -1,0 +1,33 @@
+databaseChangeLog:
+  - changeSet:
+      id: 20241125_create_tables
+      author: dmitriimrsh (generated)
+      comment: "Creates tables for films and genres"
+      changes:
+        - sqlFile:
+            path: 20241125_create_tables.sql
+            relativeToChangelogFile: true
+  - changeSet:
+      id: 20241126_create_views
+      author: dmitriimrsh (generated)
+      comment: "Creates views for films and genres"
+      changes:
+        - sqlFile:
+            path: 20241126_create_views.sql
+            relativeToChangelogFile: true
+  - changeSet:
+      id: 20241126_create_genres_functions
+      author: dmitriimrsh (generated)
+      comment : "Creates genres functions"
+      changes:
+        - sqlFile:
+            path: 20241126_create_genres_functions.sql
+            relativeToChangelogFile: true
+  - changeSet:
+      id: 20241126_create_films_functions
+      author: dmitriimrsh (generated)
+      comment: "Creates films functions"
+      changes:
+        - sqlFile:
+            path: 20241126_create_films_functions.sql
+            relativeToChangelogFile: true

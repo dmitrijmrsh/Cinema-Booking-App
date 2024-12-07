@@ -16,9 +16,9 @@ spring:
 
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5100/screening_db
-    username: username
-    password: password
+    url: jdbc:postgresql://localhost:5432/cinema-management-db
+    username: cinema-management-username
+    password: cinema-management-password
 
   liquibase:
     change-log: classpath:db/changelog/db.changelog-screening-master.xml
