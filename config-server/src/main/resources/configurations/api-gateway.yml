@@ -33,7 +33,15 @@ spring:
         - id: auth-service
           uri: http://localhost:8010
           predicates:
-            - Path=/api/v1/users/**
+            - Path=/api/v1/user/**
+        - id: auth-service
+          uri: http://localhost:8010
+          predicates:
+            - Path=/api/v1/manager/**
+        - id: auth-service
+          uri: http://localhost:8010
+          predicates:
+            - Path=/api/v1/admin/**
 
 security:
   jwt:

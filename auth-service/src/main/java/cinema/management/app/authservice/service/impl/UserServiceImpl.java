@@ -2,64 +2,91 @@ package cinema.management.app.authservice.service.impl;
 
 import cinema.management.app.authservice.dto.request.UpdateUserRequestDto;
 import cinema.management.app.authservice.dto.response.UserResponseDto;
-import cinema.management.app.authservice.entity.EmailToRefreshToken;
 import cinema.management.app.authservice.entity.User;
 import cinema.management.app.authservice.exception.CustomException;
 import cinema.management.app.authservice.mapper.UserMapper;
-import cinema.management.app.authservice.repository.UserRefreshTokenRepository;
 import cinema.management.app.authservice.repository.UserRepository;
+import cinema.management.app.authservice.security.JwtTokenProvider;
 import cinema.management.app.authservice.service.UserService;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
+    private static final String BEARER = "Bearer ";
+
     private final UserRepository userRepository;
-    private final UserRefreshTokenRepository refreshStorage;
+    private final JwtTokenProvider jwtTokenProvider;
     private final MessageSource messageSource;
     private final UserMapper userMapper;
 
     @Override
-    public UserResponseDto findUserById(Integer id) {
+    public UserResponseDto findCurrentUser(HttpServletRequest request) {
+        final String email = getEmailFromHttpRequest(request);
         return userMapper.entityToDto(
-                findById(id)
+                findByEmail(email)
         );
     }
 
     @Override
-    public UserResponseDto updateUserById(Integer id, UpdateUserRequestDto dto) {
-        User user = findById(id);
+    public UserResponseDto updateCurrentUser(
+            HttpServletRequest request,
+            final UpdateUserRequestDto dto
+    ) {
+        final String email = getEmailFromHttpRequest(request);
+        User user = findByEmail(email);
 
         user.setEmail(dto.email());
         user.setFirstName(dto.firstName());
         user.setLastName(dto.lastName());
 
         return userMapper.entityToDto(
-                userRepository.update(id, user)
+                userRepository.update(user.getId(), user)
         );
     }
 
-    @Override
-    public void deleteUserById(Integer id) {
-        final String email = findById(id).getEmail();
-        userRepository.deleteById(id);
-        Optional<EmailToRefreshToken> mayBeEmailToRefreshToken = refreshStorage.findById(email);
-        mayBeEmailToRefreshToken.ifPresent(refreshStorage::delete);
+    private String getEmailFromHttpRequest(HttpServletRequest request) {
+        String token;
+        Cookie authCookie = null;
+        Cookie[] cookies = request.getCookies();
+
+        for (var cookie : cookies) {
+            if (cookie.getName().equals("AuthToken")) {
+                authCookie = cookie;
+            }
+        }
+
+        if (authCookie != null && !authCookie.getValue().isEmpty()) {
+            token = authCookie.getValue();
+        } else {
+            token = request.getHeader(HttpHeaders.AUTHORIZATION);
+        }
+
+        if (token != null && token.startsWith(BEARER)) {
+            token = token.substring(BEARER.length());
+        }
+
+        if (token != null && jwtTokenProvider.validateAccessToken(token)) {
+            return jwtTokenProvider.getEmailFromAccessToken(token);
+        }
+
+        return null;
     }
 
-    private User findById(final Integer id) {
-        return userRepository.findById(id)
+    private User findByEmail(final String email) {
+        return userRepository.findByEmail(email)
                 .orElseThrow(() -> new CustomException(
                         this.messageSource.getMessage(
                                 "user.auth.errors.user.not.found.by.id",
-                                new Object[]{id},
+                                new Object[]{email},
                                 LocaleContextHolder.getLocale()
                         ),
                         HttpStatus.NOT_FOUND

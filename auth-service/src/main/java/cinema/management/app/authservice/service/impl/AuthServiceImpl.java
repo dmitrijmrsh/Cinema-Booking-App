@@ -15,6 +15,8 @@ import cinema.management.app.authservice.repository.UserRefreshTokenRepository;
 import cinema.management.app.authservice.repository.UserRepository;
 import cinema.management.app.authservice.security.JwtTokenProvider;
 import cinema.management.app.authservice.service.AuthService;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
@@ -97,11 +99,14 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     @Transactional
-    public UserLogInResponseDto login(UserLogInRequestDto dto) {
+    public UserLogInResponseDto logIn(
+            UserLogInRequestDto dto,
+            HttpServletResponse httpServletResponse
+    ) {
         final String email = dto.email();
         final String rawPassword = dto.password();
 
-        final User user = findUserByEmail(dto.email());
+        final User user = findUserByEmail(email);
 
         if (passwordEncoder.matches(rawPassword, user.getPassword())) {
             final String accessToken = jwtTokenProvider.generateAccessToken(user);
@@ -111,6 +116,11 @@ public class AuthServiceImpl implements AuthService {
                     user.getEmail(),
                     refreshToken
             ));
+
+            setAuthTokenCookie(
+                    httpServletResponse,
+                    accessToken
+            );
 
             return new UserLogInResponseDto(
                     accessToken,
@@ -125,6 +135,14 @@ public class AuthServiceImpl implements AuthService {
                         LocaleContextHolder.getLocale()
                 ),
                 HttpStatus.UNAUTHORIZED
+        );
+    }
+
+    @Override
+    public void logOut(HttpServletResponse httpServletResponse) {
+        setAuthTokenCookie(
+                httpServletResponse,
+                null
         );
     }
 
@@ -153,6 +171,20 @@ public class AuthServiceImpl implements AuthService {
                 ),
                 HttpStatus.UNAUTHORIZED
         );
+    }
+
+    private void setAuthTokenCookie(
+            HttpServletResponse httpServletResponse,
+            final String accessToken
+    ) {
+        Cookie cookie = new Cookie("AuthToken", accessToken);
+
+        cookie.setHttpOnly(true);
+        cookie.setSecure(true);
+        cookie.setPath("/");
+        cookie.setMaxAge(3600);
+
+        httpServletResponse.addCookie(cookie);
     }
 
     private String getSavedRefreshTokenFromEmail(final String email) {

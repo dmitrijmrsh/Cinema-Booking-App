@@ -58,4 +58,9 @@ public class ManagerServiceImpl implements ManagerService {
 
         userRepository.update(id, user);
     }
+
+    @Override
+    public void deleteUserById(Integer id) {
+        userRepository.deleteById(id);
+    }
 }

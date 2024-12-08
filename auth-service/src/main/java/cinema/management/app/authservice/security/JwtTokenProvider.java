@@ -63,12 +63,24 @@ public class JwtTokenProvider {
                 .compact();
     }
 
+    public boolean validateAccessToken(@NonNull String accessToken) {
+        return validateToken(accessToken, jwtAccessSecret);
+    }
+
     public boolean validateRefreshToken(@NonNull String refreshToken) {
         return validateToken(refreshToken, jwtRefreshSecret);
     }
 
+    public String getEmailFromAccessToken(@NonNull String accessToken) {
+        return getAccessClaims(accessToken).getSubject();
+    }
+
     public String getEmailFromRefreshToken(@NonNull String refreshToken) {
         return getRefreshClaims(refreshToken).getSubject();
+    }
+
+    public Claims getAccessClaims(@NonNull String accessToken) {
+        return getClaims(accessToken, jwtAccessSecret);
     }
 
     public Claims getRefreshClaims(@NonNull String refreshToken) {
@@ -100,7 +112,7 @@ public class JwtTokenProvider {
                             new Object[0],
                             LocaleContextHolder.getLocale()
                     ),
-                    HttpStatus.INTERNAL_SERVER_ERROR
+                    HttpStatus.UNAUTHORIZED
             );
 
         } catch (UnsupportedJwtException unsupportedJwtException) {
@@ -111,7 +123,7 @@ public class JwtTokenProvider {
                             new Object[0],
                             LocaleContextHolder.getLocale()
                     ),
-                    HttpStatus.INTERNAL_SERVER_ERROR
+                    HttpStatus.UNAUTHORIZED
             );
 
         } catch (MalformedJwtException malformedJwtException) {
@@ -122,7 +134,7 @@ public class JwtTokenProvider {
                             new Object[0],
                             LocaleContextHolder.getLocale()
                     ),
-                    HttpStatus.INTERNAL_SERVER_ERROR
+                    HttpStatus.UNAUTHORIZED
             );
 
         } catch (Exception exception) {
@@ -133,7 +145,7 @@ public class JwtTokenProvider {
                             new Object[0],
                             LocaleContextHolder.getLocale()
                     ),
-                    HttpStatus.INTERNAL_SERVER_ERROR
+                    HttpStatus.UNAUTHORIZED
             );
 
         }

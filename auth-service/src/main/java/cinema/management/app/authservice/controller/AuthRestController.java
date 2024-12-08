@@ -7,7 +7,6 @@ import cinema.management.app.authservice.dto.response.AccessTokenResponseDto;
 import cinema.management.app.authservice.dto.response.UserLogInResponseDto;
 import cinema.management.app.authservice.dto.response.UserResponseDto;
 import cinema.management.app.authservice.service.AuthService;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -61,16 +60,13 @@ public class AuthRestController {
             throw new BindException(bindingResult);
         }
 
-        UserLogInResponseDto responseDto = authService.login(dto);
-
-        setAuthTokenCookie(
-                httpServletResponse,
-                responseDto.accessToken()
+        UserLogInResponseDto responseDto = authService.logIn(
+                dto,
+                httpServletResponse
         );
 
         return ResponseEntity.ok()
                 .body(responseDto);
-
     }
 
     @GetMapping("/token")
@@ -95,22 +91,8 @@ public class AuthRestController {
 
     @DeleteMapping("/logout")
     public ResponseEntity<?> logOut(HttpServletResponse httpServletResponse) {
-        setAuthTokenCookie(httpServletResponse, null);
+        authService.logOut(httpServletResponse);
         return ResponseEntity.noContent()
                 .build();
-    }
-
-    private void setAuthTokenCookie(
-            HttpServletResponse httpServletResponse,
-            final String accessToken
-    ) {
-        Cookie cookie = new Cookie("AuthToken", accessToken);
-
-        cookie.setHttpOnly(true);
-        cookie.setSecure(true);
-        cookie.setPath("/");
-        cookie.setMaxAge(3600);
-
-        httpServletResponse.addCookie(cookie);
     }
 }

@@ -4,6 +4,7 @@ RETURNS TABLE (
     email VARCHAR,
     first_name VARCHAR,
     last_name  VARCHAR,
+    password VARCHAR,
     role_id INT,
     role_name VARCHAR
 ) AS '
@@ -14,6 +15,7 @@ RETURNS TABLE (
                 v.email,
                 v.first_name,
                 v.last_name,
+                v.password,
                 v.role_id,
                 v.role_name
             FROM auth.all_users_with_roles v;
