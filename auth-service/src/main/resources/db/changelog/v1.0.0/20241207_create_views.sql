@@ -1,7 +1,10 @@
+DROP VIEW IF EXISTS auth.all_users_with_roles;
+
 CREATE VIEW auth.all_users_with_roles AS
     SELECT
         u.id,
         u.email,
+        u.password,
         u.first_name,
         u.last_name,
         r.id as role_id,

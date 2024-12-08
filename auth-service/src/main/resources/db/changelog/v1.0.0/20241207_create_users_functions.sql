@@ -36,6 +36,21 @@ RETURNS auth.all_users_with_roles AS '
 '
 LANGUAGE plpgsql;
 
+CREATE OR REPLACE FUNCTION auth.get_user_by_email(user_email VARCHAR)
+RETURNS auth.all_users_with_roles AS '
+    BEGIN
+        RETURN (
+            SELECT
+                v
+            FROM
+                auth.all_users_with_roles v
+            WHERE
+                v.email = user_email
+        );
+    END;
+'
+LANGUAGE plpgsql;
+
 CREATE OR REPLACE FUNCTION auth.check_user_exists_by_id(user_id INT)
 RETURNS BOOLEAN AS '
     DECLARE

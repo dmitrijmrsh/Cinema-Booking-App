@@ -28,6 +28,11 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
+    public Optional<User> findByEmail(String email) {
+        return Optional.ofNullable(jdbcTemplate.queryForObject(GET_USER_BY_EMAIL, userRowMapper, email));
+    }
+
+    @Override
     public Boolean existsById(final Integer id) {
         return jdbcTemplate.queryForObject(EXISTS_BY_ID, Boolean.class, id);
     }
@@ -70,6 +75,7 @@ public class UserRepositoryImpl implements UserRepository {
 
     private static final String GET_ALL_USERS = "SELECT * FROM auth.get_all_users()";
     private static final String GET_USER_BY_ID = "SELECT * FROM auth.get_user_by_id(?)";
+    private static final String GET_USER_BY_EMAIL = "SELECT * FROM auth.get_user_by_email(?)";
     private static final String EXISTS_BY_ID = "SELECT * FROM auth.check_user_exists_by_id(?)";
     private static final String EXISTS_BY_EMAIL = "SELECT * FROM auth.check_user_exists_by_email(?)";
     private static final String SAVE_USER = "SELECT * FROM auth.save_user(?, ?, ?, ?, ?)";

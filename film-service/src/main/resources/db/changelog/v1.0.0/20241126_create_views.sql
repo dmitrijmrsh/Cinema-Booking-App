@@ -1,3 +1,5 @@
+DROP VIEW IF EXISTS film.all_films_with_genres;
+
 CREATE VIEW film.all_films_with_genres AS
     SELECT
         f.id,

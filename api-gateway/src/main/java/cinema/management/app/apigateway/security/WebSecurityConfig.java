@@ -32,6 +32,8 @@ public class WebSecurityConfig {
 
         return httpSecurity
                 .authorizeExchange(exchanges -> exchanges
+                        .pathMatchers("/api/v1/auth/**").permitAll()
+                        .pathMatchers("/api/v1/films/**").hasRole("ADMIN")
                         .anyExchange().authenticated()
                 )
                 .addFilterAt(authenticationWebFilter, SecurityWebFiltersOrder.AUTHENTICATION)

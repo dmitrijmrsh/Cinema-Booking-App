@@ -20,11 +20,11 @@ public record UpdateUserRequestDto(
                 regexp = "^[a-zA-Z0-9.-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$",
                 message = "{user.data.validation.errors.email.format.is.invalid}"
         )
-        String email,
+        String email
 
-        @NotBlank(message = "{user.data.validation.errors.password.is.blank}")
-        @Size(min = 5, max = 30, message = "{user.data.validation.errors.password.size.is.invalid}")
-        String password
+//        @NotBlank(message = "{user.data.validation.errors.password.is.blank}")
+//        @Size(min = 5, max = 30, message = "{user.data.validation.errors.password.size.is.invalid}")
+//        String password
 
 ) {
 }

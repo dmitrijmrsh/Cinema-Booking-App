@@ -17,6 +17,7 @@ import reactor.core.publisher.Mono;
 public class JwtServerAuthenticationConverter implements ServerAuthenticationConverter {
 
     private static final String BEARER = "Bearer ";
+    private static final String AUTH_TOKEN_COOKIE_PREFIX = "AuthToken=";
     private final JwtTokenProvider jwtTokenProvider;
     private final HeaderRoutePredicateFactory headerRoutePredicateFactory;
 
@@ -26,9 +27,10 @@ public class JwtServerAuthenticationConverter implements ServerAuthenticationCon
         HttpCookie tokenFromCookie = exchange.getRequest().getCookies().getFirst("AuthToken");
 
         if (tokenFromCookie == null) {
+            System.out.println("YES IT IS NULL");
             token = exchange.getRequest().getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
         } else {
-            token = tokenFromCookie.toString();
+            token = tokenFromCookie.toString().substring(AUTH_TOKEN_COOKIE_PREFIX.length());
         }
 
         if (token != null && token.startsWith(BEARER)) {
