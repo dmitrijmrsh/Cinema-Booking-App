@@ -4,6 +4,7 @@ import cinema.management.app.filmservice.entity.Genre;
 import cinema.management.app.filmservice.mapper.row.GenreRowMapper;
 import cinema.management.app.filmservice.repository.GenreRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -24,12 +25,28 @@ public class GenreRepositoryImpl implements GenreRepository {
 
     @Override
     public Optional<Genre> findById(final Integer id) {
-        return Optional.ofNullable(jdbcTemplate.queryForObject(GET_GENRE_BY_ID, genreRowMapper, id));
+        Genre genre;
+
+        try {
+            genre = jdbcTemplate.queryForObject(GET_GENRE_BY_ID, genreRowMapper, id);
+        } catch (DataAccessException exception) {
+            genre = null;
+        }
+
+        return Optional.ofNullable(genre);
     }
 
     @Override
     public Optional<Genre> findByName(final String name) {
-        return Optional.ofNullable(jdbcTemplate.queryForObject(GET_GENRE_BY_NAME, genreRowMapper, name));
+        Genre genre;
+
+        try {
+            genre = jdbcTemplate.queryForObject(GET_GENRE_BY_NAME, genreRowMapper, name);
+        } catch (DataAccessException exception) {
+            genre = null;
+        }
+
+        return Optional.ofNullable(genre);
     }
 
     @Override

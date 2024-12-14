@@ -15,14 +15,14 @@ public class ScreeningRestController {
 
     @GetMapping
     public ScreeningResponseDto findScreeningById(
-            @PathVariable("screeningId") Integer screeningId
+            @PathVariable("screeningId") final Integer screeningId
     ) {
         return screeningService.findScreeningById(screeningId);
     }
 
     @DeleteMapping
     public ResponseEntity<?> deleteScreening(
-            @PathVariable("screeningId") Integer screeningId
+            @PathVariable("screeningId") final Integer screeningId
     ) {
         screeningService.deleteScreening(screeningId);
         return ResponseEntity.noContent()

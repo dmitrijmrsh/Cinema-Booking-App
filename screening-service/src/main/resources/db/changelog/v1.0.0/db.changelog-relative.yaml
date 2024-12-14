@@ -1,0 +1,33 @@
+databaseChangeLog:
+  - changeSet:
+      id: 20241211_create_tables
+      author: dmitriimrsh (generated)
+      comment: "Creates tables for screenings and seats"
+      changes:
+        - sqlFile:
+            path: 20241211_create_tables.sql
+            relativeToChangelogFile: true
+  - changeSet:
+      id: 20241211_create_views
+      author: dmitriimrsh (generated)
+      comment: "Creates views for screenings"
+      changes:
+        - sqlFile:
+            path: 20241211_create_views.sql
+            relativeToChangelogFile: true
+  - changeSet:
+      id: 20241211_create_screenings_functions
+      author: dmitriimrsh (generated)
+      comment: "Creates screenings functions"
+      changes:
+        - sqlFile:
+            path: 20241211_create_screenings_functions.sql
+            relativeToChangelogFile: true
+  - changeSet:
+      id: 20241214_create_seats_functions
+      author: dmitriimrsh (generated)
+      comment: "Creates functions for seats"
+      changes:
+        - sqlFile:
+            path: 20241214_create_seats_functions.sql
+            relativeToChangelogFile: true

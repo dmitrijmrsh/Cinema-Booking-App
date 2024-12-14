@@ -1,6 +1,4 @@
-DROP VIEW IF EXISTS film.all_films_with_genres;
-
-CREATE VIEW film.all_films_with_genres AS
+CREATE OR REPLACE VIEW film.all_films_with_genres AS
     SELECT
         f.id,
         f.title,

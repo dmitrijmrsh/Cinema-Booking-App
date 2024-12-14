@@ -4,6 +4,7 @@ import cinema.management.app.filmservice.entity.Film;
 import cinema.management.app.filmservice.mapper.row.FilmRowMapper;
 import cinema.management.app.filmservice.repository.FilmRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -29,7 +30,15 @@ public class FilmRepositoryImpl implements FilmRepository {
 
     @Override
     public Optional<Film> findById(final Integer id) {
-        return Optional.ofNullable(jdbcTemplate.queryForObject(GET_FILM_BY_ID, filmRowMapper, id));
+        Film film;
+
+        try {
+            film = jdbcTemplate.queryForObject(GET_FILM_BY_ID, filmRowMapper, id);
+        } catch (DataAccessException ex) {
+            film = null;
+        }
+
+        return Optional.ofNullable(film);
     }
 
     @Override

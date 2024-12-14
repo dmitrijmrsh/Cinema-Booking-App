@@ -7,8 +7,11 @@ import java.util.List;
 
 public interface SeatService {
 
-    List<SeatResponseDto> findAvailableSeatsOnScreening(Integer screeningId);
+    List<SeatResponseDto> findAvailableSeatsOnScreening(final Integer screeningId);
 
-    SeatResponseDto reserveSeat(Integer screeningId, SeatReserveRequestDto dto);
+    SeatResponseDto reserveSeat(
+            final Integer screeningId,
+            final SeatReserveRequestDto dto
+    );
 
 }

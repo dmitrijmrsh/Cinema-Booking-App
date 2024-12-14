@@ -34,9 +34,11 @@ public class WebSecurityConfig {
                 .authorizeExchange(exchanges -> exchanges
                         .pathMatchers("/api/v1/auth/**").permitAll()
                         .pathMatchers("/api/v1/user/**").hasAnyRole("ADMIN", "MANAGER", "USER")
-                        .pathMatchers("/api/v1/manager/**").hasAnyRole("MANAGER", "ADMIN")
+                        .pathMatchers("/api/v1/manager/**").hasAnyRole( "ADMIN", "MANAGER")
                         .pathMatchers("/api/v1/admin/**").hasRole("ADMIN")
                         .pathMatchers("/api/v1/films/**").hasAnyRole("ADMIN", "MANAGER")
+                        .pathMatchers("/api/v1//halls/**").hasAnyRole("ADMIN", "MANAGER")
+                        .pathMatchers("/api/v1/screenings/**").hasAnyRole("ADMIN", "MANAGER", "USER")
                         .anyExchange().authenticated()
                 )
                 .addFilterAt(authenticationWebFilter, SecurityWebFiltersOrder.AUTHENTICATION)

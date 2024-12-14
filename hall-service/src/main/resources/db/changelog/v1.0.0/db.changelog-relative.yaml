@@ -1,0 +1,25 @@
+databaseChangeLog:
+  - changeSet:
+      id: 20241210_create_table
+      author: dmitriimrsh (generated)
+      comment: "Creates table for halls"
+      changes:
+        - sqlFile:
+            path: 20241210_create_table.sql
+            relativeToChangelogFile: true
+  - changeSet:
+      id: 20241210_create_halls_functions
+      author: dmitriimrsh (generated)
+      comment: "Creates functions for halls"
+      changes:
+        - sqlFile:
+            path: 20241210_create_halls_functions.sql
+            relativeToChangelogFile: true
+  - changeSet:
+      id: 20241410_add_halls
+      author: dmitriimrsh (generated)
+      comment: "Creates halls"
+      changes:
+        - sqlFile:
+            path: 20241410_add_halls.sql
+            relativeToChangelogFile: true

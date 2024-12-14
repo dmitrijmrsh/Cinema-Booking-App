@@ -1,20 +1,25 @@
 package cinema.management.app.screeningservice.repository;
 
+import cinema.management.app.screeningservice.constant.SeatStatus;
 import cinema.management.app.screeningservice.entity.Seat;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
-import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
 
-@Repository
-public interface SeatRepository extends JpaRepository<Seat, Integer> {
+public interface SeatRepository {
 
-    @Query("SELECT s FROM Seat s WHERE s.screening.id = :screening_id AND s.status = 'AVAILABLE'")
-    List<Seat> findAvailableSeatsByScreeningId(@Param("screening_id") Integer screeningId);
+    List<Seat> findAvailableByScreeningId(final Integer screeningId);
 
-    Optional<Seat> findByScreeningIdAndRowNumberAndSeatInRow(Integer screeningId, Integer rowNumber, Integer seatInRow);
+    Optional<Seat> findByScreeningIdAndRowNumberAndSeatInRow(
+            final Integer screeningId,
+            final Integer rowNumber,
+            final Integer seatInRow
+    );
+
+    Seat save(final Seat seat);
+
+    Seat updateStatus(final Integer id, final SeatStatus status);
+
+    void deleteById(final Integer id);
 
 }

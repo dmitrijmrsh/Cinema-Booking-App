@@ -31,3 +31,19 @@ databaseChangeLog:
         - sqlFile:
             path: 20241126_create_films_functions.sql
             relativeToChangelogFile: true
+  - changeSet:
+      id: 20241214_add_genres
+      author: dmitriimrsh (generated)
+      comment: "Adding genres"
+      changes:
+        - sqlFile:
+            path: 20241214_add_genres.sql
+            relativeToChangelogFile: true
+  - changeSet:
+      id: 20241214_add_films
+      author: dmitriimrsh (generated)
+      comment: "Adding films"
+      changes:
+        - sqlFile:
+            path: 20241214_add_films.sql
+            relativeToChangelogFile: true

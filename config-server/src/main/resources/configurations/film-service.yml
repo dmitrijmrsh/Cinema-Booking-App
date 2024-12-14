@@ -21,12 +21,6 @@ spring:
     username: cinema-management-username
     password: cinema-management-password
 
-  jpa:
-    hibernate:
-      ddl-auto: update
-    database: postgresql
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
-
 management:
   tracing:
     sampling:

@@ -7,11 +7,9 @@ import jakarta.validation.constraints.Size;
 
 public record UserSignUpRequestDto(
 
-        @JsonProperty("first_name")
         @NotBlank(message = "{user.data.validation.errors.first.name.is.blank}")
         String firstName,
 
-        @JsonProperty("last_name")
         @NotBlank(message = "{user.data.validation.errors.last.name.is.blank}")
         String lastName,
 

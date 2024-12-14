@@ -1,6 +1,4 @@
-DROP VIEW IF EXISTS auth.all_users_with_roles;
-
-CREATE VIEW auth.all_users_with_roles AS
+CREATE OR REPLACE VIEW auth.all_users_with_roles AS
     SELECT
         u.id,
         u.email,
