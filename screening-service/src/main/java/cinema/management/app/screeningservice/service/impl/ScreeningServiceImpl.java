@@ -96,9 +96,7 @@ public class ScreeningServiceImpl implements ScreeningService {
 
     @Override
     @Transactional
-    public ScreeningResponseDto saveScreening(
-            final ScreeningCreationRequestDto dto
-    ) {
+    public ScreeningResponseDto saveScreening(final ScreeningCreationRequestDto dto) {
         FilmDto film = filmClient.findFilmById(dto.filmId());
         HallDto hall = hallClient.findHallById(dto.hallId());
 

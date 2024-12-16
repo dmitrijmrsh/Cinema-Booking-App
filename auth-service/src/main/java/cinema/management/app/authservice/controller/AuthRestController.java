@@ -69,7 +69,7 @@ public class AuthRestController {
                 .body(responseDto);
     }
 
-    @GetMapping("/token")
+    @PostMapping("/token")
     public ResponseEntity<?> getAccessToken(
             @Valid @RequestBody RefreshTokenRequestDto dto,
             BindingResult bindingResult

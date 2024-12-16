@@ -42,6 +42,10 @@ spring:
           uri: http://localhost:8010
           predicates:
             - Path=/api/v1/admin/**
+        - id: tickets-service
+          uri: http://localhost:8040
+          predicates:
+            - Path=/api/v1/tickets/**
 
 security:
   jwt:

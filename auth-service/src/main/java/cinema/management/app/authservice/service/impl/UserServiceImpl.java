@@ -58,9 +58,11 @@ public class UserServiceImpl implements UserService {
         Cookie authCookie = null;
         Cookie[] cookies = request.getCookies();
 
-        for (var cookie : cookies) {
-            if (cookie.getName().equals("AuthToken")) {
-                authCookie = cookie;
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("AuthToken")) {
+                    authCookie = cookie;
+                }
             }
         }
 

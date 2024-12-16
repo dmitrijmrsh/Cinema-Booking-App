@@ -31,7 +31,7 @@ public class GlobalExceptionHandler {
         ProblemDetail problemDetail = ProblemDetail
                 .forStatus(HttpStatus.INTERNAL_SERVER_ERROR);
 
-        problemDetail.setProperty("errors", exception.getMessage());
+        problemDetail.setProperty("errors", List.of(exception.getMessage()));
 
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(problemDetail);

@@ -2,6 +2,7 @@ package cinema.management.app.apigateway.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.ReactiveAuthenticationManager;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.SecurityWebFiltersOrder;
@@ -38,7 +39,11 @@ public class WebSecurityConfig {
                         .pathMatchers("/api/v1/admin/**").hasRole("ADMIN")
                         .pathMatchers("/api/v1/films/**").hasAnyRole("ADMIN", "MANAGER")
                         .pathMatchers("/api/v1//halls/**").hasAnyRole("ADMIN", "MANAGER")
-                        .pathMatchers("/api/v1/screenings/**").hasAnyRole("ADMIN", "MANAGER", "USER")
+                        .pathMatchers(HttpMethod.POST,"/api/v1/screenings/**").hasAnyRole("ADMIN", "MANAGER")
+                        .pathMatchers(HttpMethod.DELETE, "/api/v1/screenings/**").hasAnyRole("ADMIN", "MANAGER")
+                        .pathMatchers(HttpMethod.GET,"/api/v1/screenings/**").hasAnyRole("ADMIN", "MANAGER", "USER")
+                        .pathMatchers(HttpMethod.PATCH, "/api/v1/screenings/**").hasAnyRole("ADMIN", "MANAGER", "USER")
+                        .pathMatchers("/api/v1/tickets/**").hasAnyRole("ADMIN", "MANAGER", "USER")
                         .anyExchange().authenticated()
                 )
                 .addFilterAt(authenticationWebFilter, SecurityWebFiltersOrder.AUTHENTICATION)

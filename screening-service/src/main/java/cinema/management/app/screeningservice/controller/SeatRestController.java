@@ -3,6 +3,7 @@ package cinema.management.app.screeningservice.controller;
 import cinema.management.app.screeningservice.dto.request.SeatReserveRequestDto;
 import cinema.management.app.screeningservice.dto.response.SeatResponseDto;
 import cinema.management.app.screeningservice.service.SeatService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +31,7 @@ public class SeatRestController {
     public ResponseEntity<?> reserveSeat(
             @PathVariable("screeningId") Integer screeningId,
             @Valid @RequestBody SeatReserveRequestDto dto,
+            HttpServletRequest httpRequest,
             BindingResult bindingResult
     ) throws BindException {
 
@@ -41,7 +43,11 @@ public class SeatRestController {
             throw new BindException(bindingResult);
         }
 
-        SeatResponseDto responseDto = seatService.reserveSeat(screeningId, dto);
+        SeatResponseDto responseDto = seatService.reserveSeat(
+                screeningId,
+                dto,
+                httpRequest
+        );
 
         return ResponseEntity.ok()
                 .body(responseDto);
