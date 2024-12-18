@@ -2,17 +2,20 @@ package cinema.management.app.ticketsservice.service.impl;
 
 import cinema.management.app.ticketsservice.client.ScreeningClient;
 import cinema.management.app.ticketsservice.dto.request.TicketCreationRequestDto;
+import cinema.management.app.ticketsservice.dto.response.ScreeningDto;
+import cinema.management.app.ticketsservice.dto.response.SeatDto;
 import cinema.management.app.ticketsservice.dto.response.TicketResponseDto;
+import cinema.management.app.ticketsservice.entity.Ticket;
 import cinema.management.app.ticketsservice.mapper.TicketMapper;
 import cinema.management.app.ticketsservice.repository.TicketRepository;
 import cinema.management.app.ticketsservice.service.TicketService;
-import com.netflix.discovery.converters.Auto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.function.Function;
 
 @Service
 @RequiredArgsConstructor
@@ -26,10 +29,8 @@ public class TicketServiceImpl implements TicketService {
     @Override
     public List<TicketResponseDto> findAllTicketsByUserId(final Integer userId) {
         List<TicketResponseDto> tickets = ticketRepository.findAllByUserId(userId).stream()
-                .map(ticket -> ticketMapper.screeningDtoToResponseDto(
-                        screeningClient.findScreeningById(ticket.getScreeningId())
-                ))
-                .toList();
+                        .map(ticketToResponseDto)
+                        .toList();
 
         log.info("Found {} tickets for user with id {}", tickets.size(), userId);
 
@@ -37,13 +38,10 @@ public class TicketServiceImpl implements TicketService {
     }
 
     @Override
+    @Transactional
     public TicketResponseDto saveTicket(final TicketCreationRequestDto dto) {
-        TicketResponseDto ticket = ticketMapper.screeningDtoToResponseDto(
-                screeningClient.findScreeningById(
-                    ticketRepository.save(
-                            ticketMapper.creationDtoToEntity(dto)
-                    ).getScreeningId()
-                )
+        TicketResponseDto ticket = ticketToResponseDto.apply(
+                ticketRepository.save(ticketMapper.creationDtoToEntity(dto))
         );
 
         log.info("Saved ticket user {} with screening id {}", dto.userId(), dto.screeningId());
@@ -52,8 +50,38 @@ public class TicketServiceImpl implements TicketService {
     }
 
     @Override
+    public Boolean existsByUserIdAndScreeningId(
+            final Integer userId,
+            final Integer screeningId
+    ) {
+        return ticketRepository.existsByUserIdAndScreeningId(userId, screeningId);
+    }
+
+    @Override
+    @Transactional
     public void deleteTicketById(final Integer id) {
         ticketRepository.deleteById(id);
         log.info("Deleted ticket with id {}", id);
     }
+
+    private final Function<Ticket, TicketResponseDto> ticketToResponseDto = new Function<>() {
+        @Override
+        public TicketResponseDto apply(Ticket ticket) {
+            ScreeningDto screening = screeningClient.findScreeningById(
+                    ticket.getScreeningId()
+            );
+            System.out.println("TICKET SEAT ID: " +  ticket.getSeatId());
+            SeatDto seat = screeningClient.findSeatById(
+                    ticket.getSeatId()
+            );
+            return new TicketResponseDto(
+                    screening.film().title(),
+                    screening.date(),
+                    screening.time(),
+                    screening.hall().id(),
+                    seat.rowNumber(),
+                    seat.seatInRow()
+            );
+        }
+    };
 }

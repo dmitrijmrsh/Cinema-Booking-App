@@ -76,6 +76,11 @@ public class ScreeningRepositoryImpl implements ScreeningRepository {
         jdbcTemplate.update(DELETE_SCREENING_BY_ID, id);
     }
 
+    @Override
+    public void deletePassed() {
+        jdbcTemplate.update(DELETE_ALL_PASSED_SCREENINGS);
+    }
+
     private static final String GET_ALL_SCREENINGS = "SELECT * FROM screening.get_all_screenings()";
     private static final String GET_SCREENINGS_BY_DATE = "SELECT * FROM screening.get_screenings_by_date(?)";
     private static final String GET_SCREENING_BY_HALL_ID_AND_DATE =
@@ -84,4 +89,5 @@ public class ScreeningRepositoryImpl implements ScreeningRepository {
     private static final String GET_SCREENING_BY_ID = "SELECT * FROM screening.get_screening_by_id(?)";
     private static final String SAVE_SCREENING = "SELECT * FROM screening.save_screening(?, ?, ?, ?)";
     private static final String DELETE_SCREENING_BY_ID = "CALL screening.delete_screening_by_id(?)";
+    private static final String DELETE_ALL_PASSED_SCREENINGS = "CALL screening.delete_all_passed_screenings()";
 }

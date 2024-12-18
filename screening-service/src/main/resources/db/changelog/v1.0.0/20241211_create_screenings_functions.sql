@@ -160,9 +160,22 @@ CREATE OR REPLACE PROCEDURE screening.delete_screening_by_id(screening_id INT)
 AS '
     BEGIN
         DELETE FROM
-            screening.screenings
+            screening.screenings t
         WHERE
-            id = screening_id;
+            t.id = screening_id;
+    END;
+'
+LANGUAGE plpgsql;
+
+CREATE OR REPLACE PROCEDURE screening.delete_all_passed_screenings()
+AS '
+    BEGIN
+        DELETE FROM
+            screening.screenings t
+        WHERE
+            t.start_date < CURRENT_DATE
+            OR
+            (t.start_date = CURRENT_DATE AND t.start_time < CURRENT_TIME);
     END;
 '
 LANGUAGE plpgsql;

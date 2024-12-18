@@ -15,7 +15,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/tickets")
 @RequiredArgsConstructor
-public class TicketsController {
+public class TicketsRestController {
 
     private final TicketService ticketService;
 
@@ -24,6 +24,14 @@ public class TicketsController {
             @PathVariable("userId") final Integer userId
     ) {
         return ticketService.findAllTicketsByUserId(userId);
+    }
+
+    @GetMapping("/exists")
+    public Boolean existsByUserIdAndScreeningId(
+            @RequestParam("userId") final Integer userId,
+            @RequestParam("screeningId") final Integer screeningId
+    ) {
+        return ticketService.existsByUserIdAndScreeningId(userId, screeningId);
     }
 
     @PostMapping

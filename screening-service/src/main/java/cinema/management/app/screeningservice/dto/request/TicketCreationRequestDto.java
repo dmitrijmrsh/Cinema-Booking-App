@@ -4,7 +4,9 @@ public record TicketCreationRequestDto(
 
         Integer userId,
 
-        Integer screeningId
+        Integer screeningId,
+
+        Integer seatId
 
 ) {
 }

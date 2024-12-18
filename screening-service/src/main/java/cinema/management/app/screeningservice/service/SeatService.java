@@ -10,6 +10,8 @@ public interface SeatService {
 
     List<SeatResponseDto> findAvailableSeatsOnScreening(final Integer screeningId);
 
+    SeatResponseDto findById(final Integer id);
+
     SeatResponseDto reserveSeat(
             final Integer screeningId,
             final SeatReserveRequestDto dto,

@@ -133,7 +133,7 @@ RETURNS BOOLEAN AS '
         exists BOOLEAN;
     BEGIN
         SELECT
-            COUNT(*) INTO exists
+            (COUNT(*) != 0) INTO exists
         FROM
             film.films
         WHERE
@@ -150,7 +150,7 @@ RETURNS BOOLEAN AS '
         exists BOOLEAN;
     BEGIN
         SELECT
-            COUNT(*) INTO exists
+            (COUNT(*) != 0) INTO exists
         FROM
             film.films
         WHERE

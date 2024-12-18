@@ -5,11 +5,13 @@ import cinema.management.app.screeningservice.client.UserClient;
 import cinema.management.app.screeningservice.constant.SeatStatus;
 import cinema.management.app.screeningservice.dto.request.SeatReserveRequestDto;
 import cinema.management.app.screeningservice.dto.request.TicketCreationRequestDto;
+import cinema.management.app.screeningservice.dto.request.TicketExistenceCheckRequestDto;
 import cinema.management.app.screeningservice.dto.response.SeatResponseDto;
-import cinema.management.app.screeningservice.dto.response.UserDto;
+import cinema.management.app.screeningservice.entity.Screening;
 import cinema.management.app.screeningservice.entity.Seat;
 import cinema.management.app.screeningservice.exception.CustomException;
 import cinema.management.app.screeningservice.mapper.SeatMapper;
+import cinema.management.app.screeningservice.repository.ScreeningRepository;
 import cinema.management.app.screeningservice.repository.SeatRepository;
 import cinema.management.app.screeningservice.service.SeatService;
 import cinema.management.app.screeningservice.util.JwtUtil;
@@ -22,6 +24,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 @Service
@@ -30,6 +34,7 @@ import java.util.List;
 public class SeatServiceImpl implements SeatService {
 
     private final SeatRepository seatRepository;
+    private final ScreeningRepository screeningRepository;
     private final UserClient userClient;
     private final TicketsClient ticketsClient;
     private final SeatMapper seatMapper;
@@ -47,6 +52,24 @@ public class SeatServiceImpl implements SeatService {
     }
 
     @Override
+    public SeatResponseDto findById(final Integer id) {
+        SeatResponseDto seat = seatRepository.findById(id)
+                .map(seatMapper::entityToDto)
+                .orElseThrow(() -> new CustomException(
+                        this.messageSource.getMessage(
+                                "screening.service.not.found.seat.by.id",
+                                new Object[]{id},
+                                LocaleContextHolder.getLocale()
+                        ),
+                        HttpStatus.NOT_FOUND
+                ));
+
+        log.info("Found seat with id {}", id);
+
+        return seat;
+    }
+
+    @Override
     @Transactional
     public SeatResponseDto reserveSeat(
             final Integer screeningId,
@@ -55,6 +78,9 @@ public class SeatServiceImpl implements SeatService {
     ) {
         Integer rowNumber = dto.rowNumber();
         Integer seatInRow = dto.seatInRow();
+        Integer currentUserId = userClient.getCurrentUserInfo(JwtUtil.getTokenFromHttpRequest(
+                httpRequest
+        )).id();
 
         Seat seat = seatRepository.findByScreeningIdAndRowNumberAndSeatInRow(
                 screeningId,
@@ -69,6 +95,8 @@ public class SeatServiceImpl implements SeatService {
                 HttpStatus.NOT_FOUND
         ));
 
+        validateReserveSeatRequest(screeningId,currentUserId);
+
         if (seat.getStatus() == SeatStatus.AVAILABLE) {
             seat = seatRepository.updateStatus(
                     seat.getId(),
@@ -82,10 +110,9 @@ public class SeatServiceImpl implements SeatService {
                     screeningId
             );
 
-            sendTicketCreationRequest(
-                    httpRequest,
-                    screeningId
-            );
+            ticketsClient.createTicket(new TicketCreationRequestDto(
+                    currentUserId, screeningId, seat.getId()
+            ));
 
             return seatMapper.entityToDto(seat);
         }
@@ -107,16 +134,42 @@ public class SeatServiceImpl implements SeatService {
         );
     }
 
-    private void sendTicketCreationRequest(
-            HttpServletRequest httpRequest,
-            final Integer screeningId
+    private void validateReserveSeatRequest(
+            final Integer screeningId,
+            final Integer userId
     ) {
-        UserDto userDto = userClient.getCurrentUserInfo(
-                JwtUtil.getTokenFromHttpRequest(httpRequest)
-        );
-        ticketsClient.createTicket(new TicketCreationRequestDto(
-                userDto.id(),
-                screeningId
-        ));
+        Screening screening = screeningRepository.findById(screeningId)
+                .orElseThrow(() -> new CustomException(
+                        this.messageSource.getMessage(
+                                "screening.service.not.found.screening.by.id",
+                                new Object[]{screeningId},
+                                LocaleContextHolder.getLocale()
+                        ),
+                        HttpStatus.NOT_FOUND
+                ));
+
+        if (screening.getDate().isBefore(LocalDate.now()) ||
+                (screening.getDate().equals(LocalDate.now()) && screening.getTime().isBefore(LocalTime.now()))) {
+            throw new CustomException(
+                    this.messageSource.getMessage(
+                            "screening.service.screening.passed",
+                            new Object[]{screeningId},
+                            LocaleContextHolder.getLocale()
+                    ),
+                    HttpStatus.UNPROCESSABLE_ENTITY
+            );
+        }
+
+        if (ticketsClient.checkTicketExistsByUserIdAndScreeningId(userId, screeningId)) {
+            System.out.println("DAAAAAAAA");
+            throw new CustomException(
+                    this.messageSource.getMessage(
+                            "screening.service.user.already.reserved.seat",
+                            new Object[]{userId, screeningId},
+                            LocaleContextHolder.getLocale()
+                    ),
+                    HttpStatus.CONFLICT
+            );
+        }
     }
 }

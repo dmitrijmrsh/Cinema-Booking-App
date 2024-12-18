@@ -142,7 +142,7 @@ public class AuthServiceImpl implements AuthService {
     public void logOut(HttpServletResponse httpServletResponse) {
         setAuthTokenCookie(
                 httpServletResponse,
-                null
+                ""
         );
     }
 

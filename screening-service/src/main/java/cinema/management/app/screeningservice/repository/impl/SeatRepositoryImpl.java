@@ -48,6 +48,19 @@ public class SeatRepositoryImpl implements SeatRepository {
     }
 
     @Override
+    public Optional<Seat> findById(final Integer id) {
+        Seat seat;
+
+        try {
+            seat = jdbcTemplate.queryForObject(FIND_BY_ID, seatRowMapper, id);
+        } catch (DataAccessException exception) {
+            seat = null;
+        }
+
+        return Optional.ofNullable(seat);
+    }
+
+    @Override
     public Seat save(final Seat seat) {
         return jdbcTemplate.queryForObject(
                 SAVE_SEAT,
@@ -77,6 +90,7 @@ public class SeatRepositoryImpl implements SeatRepository {
     private static final String FIND_AVAILABLE_BY_SCREENING_ID = "SELECT * FROM screening.get_available_by_screening_id(?)";
     private static final String FIND_BY_SCREENING_ID_AND_ROW_NUMBER_AND_SEAT_IN_ROW =
             "SELECT * FROM screening.get_by_screening_id_and_row_number_and_seat_in_row(?, ?, ?)";
+    private static final String FIND_BY_ID = "SELECT * FROM screening.get_by_id(?)";
     private static final String SAVE_SEAT = "SELECT * FROM screening.save_seat(?, ?, ?, ?)";
     private static final String UPDATE_SEAT_STATUS = "SELECT * FROM screening.update_seat_status(?, ?)";
     private static final String DELETE_SEAT_BY_ID = "CALL screening.delete_seat_by_id(?)";

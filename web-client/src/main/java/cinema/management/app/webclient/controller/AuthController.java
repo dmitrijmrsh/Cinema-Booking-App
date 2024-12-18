@@ -1,8 +1,10 @@
 package cinema.management.app.webclient.controller;
 
 import cinema.management.app.webclient.client.auth.AuthRestClient;
+import cinema.management.app.webclient.dto.auth.response.UserLogInResponseDto;
 import cinema.management.app.webclient.exception.UserAlreadyExistException;
 import cinema.management.app.webclient.exception.UserNotFoundException;
+import cinema.management.app.webclient.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,7 +30,9 @@ public class AuthController {
             Model model
     ) {
         try {
-            authRestClient.logIn(email, password);
+            UserLogInResponseDto dto = authRestClient.logIn(email, password);
+            SecurityUtil.setAccessToken(dto.accessToken());
+            SecurityUtil.setRefreshToken(dto.refreshToken());
             return "redirect:/";
         } catch (UserNotFoundException exception) {
             model.addAttribute("error", exception.getErrors().getFirst());

@@ -16,6 +16,8 @@ public interface SeatRepository {
             final Integer seatInRow
     );
 
+    Optional<Seat> findById(final Integer id);
+
     Seat save(final Seat seat);
 
     Seat updateStatus(final Integer id, final SeatStatus status);

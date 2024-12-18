@@ -11,7 +11,11 @@ public record TicketResponseDto(
 
         LocalTime time,
 
-        Integer hallId
+        Integer hallId,
+
+        Integer rowNumber,
+
+        Integer seatInRow
 
 ) {
 }

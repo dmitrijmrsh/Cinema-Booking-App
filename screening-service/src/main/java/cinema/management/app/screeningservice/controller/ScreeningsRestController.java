@@ -45,4 +45,10 @@ public class ScreeningsRestController {
         return ResponseEntity.created(URI.create(entityURI))
                 .body(responseDto);
     }
+
+    @DeleteMapping
+    public ResponseEntity<?> deleteAllPassedScreenings() {
+        screeningService.deleteAllPassedScreenings();
+        return ResponseEntity.noContent().build();
+    }
 }

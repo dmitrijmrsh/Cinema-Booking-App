@@ -7,8 +7,11 @@ public record TicketCreationRequestDto(
         @NotNull(message = "{tickets.service.validation.user.id.is.null}")
         Integer userId,
 
-        @NotNull(message = "{ticket.service.validation.screening.id.is.null}")
-        Integer screeningId
+        @NotNull(message = "{tickets.service.validation.screening.id.is.null}")
+        Integer screeningId,
+
+        @NotNull(message = "{tickets.service.validation.seat.id.is.null}")
+        Integer seatId
 
 ) {
 }

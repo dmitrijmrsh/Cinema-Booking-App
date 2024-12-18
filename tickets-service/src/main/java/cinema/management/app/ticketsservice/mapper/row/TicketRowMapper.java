@@ -17,6 +17,7 @@ public class TicketRowMapper implements RowMapper<Ticket> {
         ticket.setId(rs.getInt("id"));
         ticket.setScreeningId(rs.getInt("screening_id"));
         ticket.setUserId(rs.getInt("user_id"));
+        ticket.setSeatId(rs.getInt("seat_id"));
 
         return ticket;
     }

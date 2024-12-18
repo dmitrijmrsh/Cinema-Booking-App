@@ -147,6 +147,13 @@ public class ScreeningServiceImpl implements ScreeningService {
         log.info("Deleted screening with id {}", id);
     }
 
+    @Override
+    @Transactional
+    public void deleteAllPassedScreenings() {
+        screeningRepository.deletePassed();
+        log.info("Deleted all passed screenings");
+    }
+
     private List<Seat> createSeatsForScreening(
             Integer screeningId,
             HallDto hall

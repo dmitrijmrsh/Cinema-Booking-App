@@ -45,6 +45,21 @@ RETURNS screening.seats AS '
 '
 LANGUAGE plpgsql;
 
+CREATE OR REPLACE FUNCTION screening.get_by_id(seat_id INT)
+RETURNS screening.seats AS '
+    BEGIN
+        RETURN (
+            SELECT
+                t
+            FROM
+                screening.seats t
+            WHERE
+                t.id = seat_id
+        );
+    END;
+'
+LANGUAGE plpgsql;
+
 CREATE OR REPLACE FUNCTION screening.save_seat(
     seat_row_number INT,
     seat_in_row_number INT,

@@ -26,4 +26,6 @@ public interface ScreeningRepository {
 
     void deleteById(final Integer id);
 
+    void deletePassed();
+
 }

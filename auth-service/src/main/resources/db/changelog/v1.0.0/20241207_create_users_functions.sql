@@ -59,7 +59,7 @@ RETURNS BOOLEAN AS '
         exists BOOLEAN;
     BEGIN
         SELECT
-            COUNT(*) INTO exists
+            (COUNT(*) != 0) INTO exists
         FROM
             auth.users
         WHERE
@@ -76,7 +76,7 @@ RETURNS BOOLEAN AS '
         exists BOOLEAN;
     BEGIN
         SELECT
-            COUNT(*) INTO exists
+            (COUNT(*) != 0) INTO exists
         FROM
             auth.users
         WHERE

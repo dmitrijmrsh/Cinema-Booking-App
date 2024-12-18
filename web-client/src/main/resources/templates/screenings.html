@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Киносеансы</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            padding: 20px;
+            max-width: 1200px;
+            margin: auto;
+        }
+        .card {
+            background: #fff;
+            padding: 15px;
+            margin: 10px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .card h3, .card p {
+            margin: 5px 0;
+        }
+        .card-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        .button-link {
+            display: inline-block;
+            padding: 10px 15px;
+            font-size: 16px;
+            color: #fff;
+            text-align: center;
+            text-decoration: none;
+            background-color: #007bff;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+        .button-link:hover {
+            background-color: #0056b3;
+        }
+        .home-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 10px 15px;
+            font-size: 16px;
+            color: #fff;
+            text-align: center;
+            text-decoration: none;
+            background-color: #007bff;
+            border-radius: 5px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s ease;
+        }
+        .home-button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Киносеансы</h1>
+    <div class="card-container">
+        <div class="card" th:each="screening : ${screenings}" th:id="'card-' + ${screening.id}" th:data-id="${screening.id}">
+            <h3 th:text="${screening.film.title}"></h3>
+            <p>Зал: <span th:text="${screening.hall.id}"></span></p>
+            <p>Дата: <span th:text="${screening.date}"></span></p>
+            <p>Время: <span th:text="${screening.time}"></span></p>
+            <a class="button-link" th:href="@{/screenings/{id}(id=${screening.id})}">Подробнее</a>
+        </div>
+    </div>
+</div>
+
+<a class="home-button" href="/">Главная страница</a>
+</body>
+</html>

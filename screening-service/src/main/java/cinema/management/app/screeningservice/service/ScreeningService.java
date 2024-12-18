@@ -20,4 +20,6 @@ public interface ScreeningService {
 
     void deleteScreening(final Integer id);
 
+    void deleteAllPassedScreenings();
+
 }

@@ -5,7 +5,6 @@ import org.apache.http.HttpHeaders;
 import org.springframework.http.HttpCookie;
 import org.springframework.http.ResponseCookie;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.server.authentication.ServerAuthenticationConverter;
 import org.springframework.stereotype.Component;
@@ -25,7 +24,6 @@ public class JwtServerAuthenticationConverter implements ServerAuthenticationCon
         HttpCookie tokenCookie = exchange.getRequest().getCookies().getFirst("AuthToken");
 
         if (tokenCookie != null && !tokenCookie.getValue().isEmpty()) {
-            System.out.println("USING COOKIE: " + tokenCookie.getValue());
             token = tokenCookie.getValue();
 
             if (!jwtTokenProvider.validateAccessToken(token)) {

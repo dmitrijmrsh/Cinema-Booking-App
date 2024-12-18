@@ -10,6 +10,11 @@ public interface TicketRepository {
 
     Ticket save(final Ticket ticket);
 
+    Boolean existsByUserIdAndScreeningId(
+            final Integer userId,
+            final Integer screeningId
+    );
+
     void deleteById(final Integer id);
 
 }
