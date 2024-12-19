@@ -62,4 +62,13 @@ public class TicketsRestController {
                 .build();
     }
 
+    @DeleteMapping("/by-user/{userId:\\d+}")
+    public ResponseEntity<?> deleteExpiredTicketsByUserId(
+            @PathVariable("userId") final Integer userId
+    ) {
+        ticketService.deleteExpiredTicketsByUserId(userId);
+        return ResponseEntity.noContent()
+                .build();
+    }
+
 }

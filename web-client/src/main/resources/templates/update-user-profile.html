@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Регистрация</title>
+    <title>Обновление данных пользователя</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -44,7 +44,7 @@
         .button:hover {
             background-color: #0056b3;
         }
-        .home-button {
+        .profile-button {
             position: fixed;
             bottom: 20px;
             right: 20px;
@@ -58,29 +58,22 @@
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             transition: background-color 0.3s ease;
         }
-        .home-button:hover {
+        .profile-button:hover {
             background-color: #0056b3;
-        }
-        .success-message {
-            color: green;
-            font-size: 14px;
-            margin-top: 10px;
         }
     </style>
 </head>
 <body>
 <div class="form-container">
-    <h2>Регистрация</h2>
-    <form th:action="@{/signup}" method="post">
+    <h2>Обновление данных пользователя</h2>
+    <form th:action="@{/profile/me/update}" method="post">
         <input type="text" name="firstName" placeholder="Имя" required>
         <input type="text" name="lastName" placeholder="Фамилия" required>
         <input type="email" name="email" placeholder="Email" required>
-        <input type="password" name="password" placeholder="Пароль" required>
-        <button class="button" type="submit">Зарегистрироваться</button>
+        <button class="button" type="submit">Подтвердить</button>
     </form>
-    <p class="success-message" th:if="${success}">Регистрация прошла успешно!</p>
 </div>
 
-<a class="home-button" href="/">Главная страница</a>
+<a class="profile-button" href="/profile/me">Мой профиль</a>
 </body>
 </html>

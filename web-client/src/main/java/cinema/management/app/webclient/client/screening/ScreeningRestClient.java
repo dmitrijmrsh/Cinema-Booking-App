@@ -2,6 +2,8 @@ package cinema.management.app.webclient.client.screening;
 
 import cinema.management.app.webclient.dto.screening.response.ScreeningResponseDto;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 public interface ScreeningRestClient {
@@ -12,6 +14,15 @@ public interface ScreeningRestClient {
 
     ScreeningResponseDto findScreeningById(final Integer id);
 
+    void createScreening(
+            final LocalDate date,
+            final LocalTime time,
+            final Integer filmId,
+            final Integer hallId
+    );
+
     void reserveSeat(final Integer screeningId);
+
+    void deleteAllPassedScreenings();
 
 }

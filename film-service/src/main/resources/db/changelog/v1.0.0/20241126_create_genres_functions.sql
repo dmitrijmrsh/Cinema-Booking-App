@@ -43,9 +43,21 @@ RETURNS film.genres AS '
     DECLARE
         new_genre film.genres;
     BEGIN
-        INSERT INTO film.genres (name) VALUES (genre_name)
+        INSERT INTO film.genres (id, name) VALUES (
+        (
+            SELECT MAX(t.id) + 1
+            FROM film.genres t
+        ),
+        genre_name)
         RETURNING * INTO new_genre;
-        RETURN new_genre;
+        RETURN (
+            SELECT
+                t
+            FROM
+                film.genres t
+            WHERE
+                t.id = new_genre.id
+        );
     END;'
 LANGUAGE plpgsql;
 

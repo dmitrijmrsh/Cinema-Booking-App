@@ -14,8 +14,12 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -64,13 +68,35 @@ public class TicketServiceImpl implements TicketService {
         log.info("Deleted ticket with id {}", id);
     }
 
+    @Override
+    @Transactional
+    public void deleteExpiredTicketsByUserId(final Integer userId) {
+        Map<Integer, TicketResponseDto> ticketIdToDto = ticketRepository.findAllByUserId(userId).stream()
+                .collect(Collectors.toMap(
+                        Ticket::getId,
+                        ticketToResponseDto
+                ));
+
+        for (var ticketEntry : ticketIdToDto.entrySet()) {
+            var ticketResponseDto = ticketEntry.getValue();
+
+            if (ticketResponseDto.date().isBefore(LocalDate.now())
+                || (ticketResponseDto.date().equals(LocalDate.now())
+                    && ticketResponseDto.time().isBefore(LocalTime.now()))
+            ) {
+                ticketRepository.deleteById(ticketEntry.getKey());
+            }
+        }
+
+        log.info("Deleted expired tickets for user with id {}", userId);
+    }
+
     private final Function<Ticket, TicketResponseDto> ticketToResponseDto = new Function<>() {
         @Override
         public TicketResponseDto apply(Ticket ticket) {
             ScreeningDto screening = screeningClient.findScreeningById(
                     ticket.getScreeningId()
             );
-            System.out.println("TICKET SEAT ID: " +  ticket.getSeatId());
             SeatDto seat = screeningClient.findSeatById(
                     ticket.getSeatId()
             );
