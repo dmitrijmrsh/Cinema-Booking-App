@@ -10,14 +10,16 @@ public interface ScreeningService {
 
     List<ScreeningResponseDto> findAllScreenings();
 
-    List<ScreeningResponseDto> findScreeningsByDate(LocalDate date);
+    List<ScreeningResponseDto> findScreeningsByDate(final LocalDate date);
 
-    List<ScreeningResponseDto> findScreeningsByFilmId(Integer id);
+    List<ScreeningResponseDto> findScreeningsByFilmId(final Integer filmId);
 
-    ScreeningResponseDto findScreeningById(Integer id);
+    ScreeningResponseDto findScreeningById(final Integer id);
 
-    ScreeningResponseDto saveScreening(ScreeningCreationRequestDto dto);
+    ScreeningResponseDto saveScreening(final ScreeningCreationRequestDto dto);
 
-    void deleteScreening(Integer id);
+    void deleteScreening(final Integer id);
+
+    void deleteAllPassedScreenings();
 
 }

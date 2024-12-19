@@ -11,16 +11,16 @@ public interface HallService {
 
     List<HallResponseDto> findAllHalls();
 
-    List<HallResponseDto> findAllHallsWithCurrentActivityStatus(Boolean activityStatus);
+    List<HallResponseDto> findAllHallsWithCurrentActivityStatus(final Boolean activityStatus);
 
-    HallResponseDto findHallById(Integer id);
+    HallResponseDto findHallById(final Integer id);
 
-    HallResponseDto saveHall(HallCreateRequestDto dto);
+    HallResponseDto saveHall(final HallCreateRequestDto dto);
 
-    HallResponseDto updateHall(Integer id, HallUpdateRequestDto dto);
+    HallResponseDto updateHall(final Integer id, final HallUpdateRequestDto dto);
 
-    HallResponseDto updateHallActivityStatus(Integer id, HallUpdateActivityStatusRequestDto dto);
+    HallResponseDto updateHallActivityStatus(final Integer id, final HallUpdateActivityStatusRequestDto dto);
 
-    void deleteHall(Integer id);
+    void deleteHall(final Integer id);
 
 }

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Список фильмов</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            padding: 20px;
+            max-width: 1200px;
+            margin: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        table th, table td {
+            padding: 10px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+        table th {
+            background-color: #007bff;
+            color: #fff;
+        }
+        table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        .home-button, .special-button {
+            position: fixed;
+            padding: 10px 15px;
+            font-size: 16px;
+            color: #fff;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 5px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s ease;
+        }
+        .home-button {
+            bottom: 20px;
+            left: 20px;
+            background-color: #007bff;
+        }
+        .home-button:hover {
+            background-color: #0056b3;
+        }
+        .special-button {
+            bottom: 20px;
+            right: 20px;
+            background-color: #007bff;
+        }
+        .special-button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Список фильмов</h1>
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Название</th>
+            <th>Жанр</th>
+            <th>Длительность (мин.)</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="film : ${films}">
+            <td th:text="${film.id}"></td>
+            <td th:text="${film.title}"></td>
+            <td th:text="${film.genre}"></td>
+            <td th:text="${film.durationInMinutes}"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<a class="home-button" th:href="@{/profile/special-features/films/create}">Создать фильм</a>
+<a class="special-button" th:href="@{/profile/special-features}">Спец.возможности</a>
+</body>
+</html>

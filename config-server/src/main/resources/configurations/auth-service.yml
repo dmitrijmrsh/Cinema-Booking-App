@@ -1,0 +1,44 @@
+eureka:
+  instance:
+    hostname: localhost
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+
+server:
+  port: 8010
+
+spring:
+  application:
+    name: auth-service
+
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.yaml
+
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/cinema-management-db
+    username: cinema-management-username
+    password: cinema-management-password
+
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      password: redis-password
+
+security:
+  jwt:
+    token:
+      secret:
+        access: levc/guxCQY5xgOePnfbG52ZjB4Jn+PvZMK+DBxwBKHG3ODmlQQ8FBWO4juJkTJd1htUl82Io+LAz54kKbKmQw==
+        refresh: dkplOGJk8xp+xyJNMggCFocm0AWnBl6s4GfYLeQwlE0w0+G7PKGovWjL6fCy622Tg30scZ3P37EZ7yjvadurog==
+
+  admin:
+    email: application-admin@example.com
+    password: admin-password
+
+management:
+  tracing:
+    sampling:
+      probability: 1.0

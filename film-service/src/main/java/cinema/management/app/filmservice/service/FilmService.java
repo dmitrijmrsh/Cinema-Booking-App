@@ -10,14 +10,14 @@ public interface FilmService {
 
     List<FilmResponseDto> findAllFilms();
 
-    List<FilmResponseDto> findFilmByGenre(String genreName);
+    List<FilmResponseDto> findFilmByGenre(final String genreName);
 
-    FilmResponseDto findFilmById(Integer id);
+    FilmResponseDto findFilmById(final Integer id);
 
-    FilmResponseDto saveFilm(FilmCreationRequestDto dto);
+    FilmResponseDto saveFilm(final FilmCreationRequestDto dto);
 
-    FilmResponseDto updateFilm(Integer id, FilmUpdateRequestDto dto);
+    FilmResponseDto updateFilm(final Integer id, final FilmUpdateRequestDto dto);
 
-    void deleteFilm(Integer id);
+    void deleteFilm(final Integer id);
 
 }

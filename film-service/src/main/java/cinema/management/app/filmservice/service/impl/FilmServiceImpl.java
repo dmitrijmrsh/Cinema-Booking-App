@@ -19,7 +19,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @Log4j2
@@ -33,95 +32,95 @@ public class FilmServiceImpl implements FilmService {
 
     @Override
     public List<FilmResponseDto> findAllFilms() {
-        log.info("Returning all films");
+        log.info("Getting all films");
         return filmRepository.findAll().stream()
                 .map(filmMapper::entityToDto)
                 .toList();
     }
 
     @Override
-    public FilmResponseDto findFilmById(Integer id) {
-        Film film = findById(id);
-
-        log.info("Found film with ID {}", id);
-
-        return filmMapper.entityToDto(film);
-    }
-
-    @Override
-    public List<FilmResponseDto> findFilmByGenre(String genreName) {
-        List<Film> films = filmRepository.findByGenreName(genreName);
-
-        log.info("Found {} films by genre {}.", films.size(), genreName);
-
-        return films.stream()
+    public List<FilmResponseDto> findFilmByGenre(final String genreName) {
+        log.info("Getting all films by genre: {}", genreName);
+        return filmRepository.findAllByGenreName(genreName).stream()
                 .map(filmMapper::entityToDto)
                 .toList();
     }
 
     @Override
+    public FilmResponseDto findFilmById(final Integer id) {
+        log.info("Getting film with id: {}", id);
+        return filmRepository.findById(id)
+                .map(filmMapper::entityToDto)
+                .orElseThrow(() -> new CustomException(
+                        this.messageSource.getMessage(
+                                "film.service.errors.film.not.found",
+                                new Object[]{id},
+                                LocaleContextHolder.getLocale()
+                        ),
+                        HttpStatus.NOT_FOUND
+                ));
+    }
+
+    @Override
     @Transactional
-    public FilmResponseDto saveFilm(FilmCreationRequestDto dto) {
-        String title = dto.title();
+    public FilmResponseDto saveFilm(final FilmCreationRequestDto dto) {
+        log.info("Saving film with name: {}", dto.title());
 
         if (filmRepository.existsByTitle(dto.title())) {
-            throw new CustomException(messageSource.getMessage(
-                    "film.service.errors.film.already.exists",
-                    new Object[]{title},
-                    LocaleContextHolder.getLocale()
-            ), HttpStatus.UNPROCESSABLE_ENTITY);
+            throw new CustomException(
+                    this.messageSource.getMessage(
+                            "film.service.errors.film.already.exists",
+                            new Object[]{dto.title()},
+                            LocaleContextHolder.getLocale()
+                    ),
+                    HttpStatus.CONFLICT
+            );
         }
 
         Film film = filmMapper.dtoToEntity(dto);
+        setGenreToFilm(film, dto.genre());
 
-        Optional<Genre> mayBeGenre = genreRepository.findByName(dto.genre());
-        mayBeGenre.ifPresent(film::setGenre);
-
-        film = filmRepository.save(film);
-
-        log.info("Saved film {}", film.getTitle());
-
-        return filmMapper.entityToDto(film);
+        return filmMapper.entityToDto(filmRepository.save(film));
     }
 
     @Override
     @Transactional
-    public FilmResponseDto updateFilm(Integer id, FilmUpdateRequestDto dto) {
-        Film film = findById(id);
+    public FilmResponseDto updateFilm(final Integer id, final FilmUpdateRequestDto dto) {
+        log.info("Updating film with id: {}", id);
 
-        film.setTitle(dto.title());
-        film.setDescription(dto.description());
-        film.setDurationInMinutes(dto.durationInMinutes());
+        if (!filmRepository.existsById(id)) {
+            throw new CustomException(
+                    this.messageSource.getMessage(
+                            "film.service.errors.film.not.found",
+                            new Object[]{id},
+                            LocaleContextHolder.getLocale()
+                    ),
+                    HttpStatus.NOT_FOUND
+            );
+        }
 
-        Optional<Genre> mayBeGenre = genreRepository.findByName(dto.genre());
-        mayBeGenre.ifPresentOrElse(
-                film::setGenre,
-                () -> {
-                    Genre genre = new Genre();
-                    genre.setName(dto.genre());
-                    film.setGenre(genre);
-                }
+        Film film = filmMapper.dtoToEntity(dto);
+        setGenreToFilm(film, dto.genre());
+
+        return filmMapper.entityToDto(
+                filmRepository.update(id, film)
         );
-
-        Film updatedFilm = filmRepository.save(film);
-
-        return filmMapper.entityToDto(updatedFilm);
     }
 
     @Override
     @Transactional
-    public void deleteFilm(Integer id) {
-        filmRepository.deleteById(id);
-        log.info("Deleted film with id {}", id);
+    public void deleteFilm(final Integer id) {
+        filmRepository.delete(id);
     }
 
-    private Film findById(Integer id) {
-        return filmRepository.findById(id)
-                .orElseThrow(() -> new CustomException(messageSource.getMessage(
-                        "film.service.errors.film.not.found",
-                        new Object[] {id},
-                        LocaleContextHolder.getLocale()
-                ), HttpStatus.NOT_FOUND));
+    private void setGenreToFilm(Film film,  final String genreName) {
+        film.setGenre(
+                genreRepository.findByName(genreName).orElseGet(
+                        () -> genreRepository.save(new Genre(
+                                -1,
+                                genreName
+                        ))
+                )
+        );
     }
-    
 }

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 
 public record ScreeningResponseDto(
 
@@ -13,11 +14,12 @@ public record ScreeningResponseDto(
 
         LocalTime time,
 
-        @JsonProperty("hall")
+        @JsonProperty("film")
         FilmDto filmDto,
 
-        @JsonProperty("film")
-        HallDto hallDto
+        @JsonProperty("hall")
+        HallDto hallDto,
 
+        List<SeatResponseDto> seats
 ) {
 }

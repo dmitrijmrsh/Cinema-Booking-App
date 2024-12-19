@@ -16,23 +16,19 @@ spring:
 
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5100/screening_db
-    username: username
-    password: password
+    url: jdbc:postgresql://localhost:5432/cinema-management-db
+    username: cinema-management-username
+    password: cinema-management-password
 
   liquibase:
-    change-log: classpath:db/changelog/db.changelog-screening-master.xml
-
-  jpa:
-    hibernate:
-      ddl-auto: update
-    database: postgresql
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    change-log: classpath:db/changelog/db.changelog-master.yaml
 
 application:
   config:
     films-url: http://localhost:8070/api/v1/films
     halls-url: http://localhost:8050/api/v1/halls
+    user-url: http://localhost:8010/api/v1/user
+    tickets-url: http://localhost:8040/api/v1/tickets
 
 management:
   tracing:

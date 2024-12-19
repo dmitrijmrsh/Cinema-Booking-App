@@ -1,0 +1,14 @@
+CREATE SCHEMA IF NOT EXISTS film;
+
+CREATE TABLE IF NOT EXISTS film.genres(
+    id SERIAL NOT NULL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL UNIQUE
+);
+
+CREATE TABLE IF NOT EXISTS film.films(
+    id SERIAL NOT NULL PRIMARY KEY,
+    title VARCHAR(255) NOT NULL UNIQUE,
+    description TEXT,
+    duration_in_minutes INT NOT NULL,
+    genre_id INT REFERENCES film.genres(id) ON DELETE SET NULL
+);

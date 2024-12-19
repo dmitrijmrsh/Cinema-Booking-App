@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
 @Component
 public interface SeatMapper {
 
-    @Mapping(source = "seat.screening.id", target = "screeningId")
     SeatResponseDto entityToDto(Seat seat);
 
 }

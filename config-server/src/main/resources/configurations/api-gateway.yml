@@ -26,6 +26,32 @@ spring:
           uri: http://localhost:8050
           predicates:
             - Path=/api/v1/halls/**
+        - id: auth-service
+          uri: http://localhost:8010
+          predicates:
+            - Path=/api/v1/auth/**
+        - id: auth-service
+          uri: http://localhost:8010
+          predicates:
+            - Path=/api/v1/user/**
+        - id: auth-service
+          uri: http://localhost:8010
+          predicates:
+            - Path=/api/v1/manager/**
+        - id: auth-service
+          uri: http://localhost:8010
+          predicates:
+            - Path=/api/v1/admin/**
+        - id: tickets-service
+          uri: http://localhost:8040
+          predicates:
+            - Path=/api/v1/tickets/**
+
+security:
+  jwt:
+    token:
+      secret:
+        access: levc/guxCQY5xgOePnfbG52ZjB4Jn+PvZMK+DBxwBKHG3ODmlQQ8FBWO4juJkTJd1htUl82Io+LAz54kKbKmQw==
 
 management:
   tracing:

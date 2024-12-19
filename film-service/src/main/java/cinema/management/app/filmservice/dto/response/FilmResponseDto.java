@@ -12,7 +12,6 @@ public record FilmResponseDto(
 
         String description,
 
-        @JsonProperty("duration_in_minutes")
         Integer durationInMinutes
 
 ) {

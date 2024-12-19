@@ -13,19 +13,13 @@ spring:
     name: film-service
 
   liquibase:
-    change-log: classpath:db/changelog/db.changelog-film-master.xml
+    change-log: classpath:db/changelog/db.changelog-master.yaml
 
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5001/films_db
-    username: username
-    password: password
-
-  jpa:
-    hibernate:
-      ddl-auto: update
-    database: postgresql
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    url: jdbc:postgresql://localhost:5432/cinema-management-db
+    username: cinema-management-username
+    password: cinema-management-password
 
 management:
   tracing:

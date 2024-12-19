@@ -1,8 +1,8 @@
 package cinema.management.app.filmservice.dto.request;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 
 public record FilmCreationRequestDto(
 
@@ -15,7 +15,7 @@ public record FilmCreationRequestDto(
         @NotBlank(message = "{film.service.validation.errors.film.description.is.blank}")
         String description,
 
-        @JsonProperty("duration_in_minutes")
+        @Positive
         @NotNull(message = "{film.service.validation.errors.film.duration.in.minutes.is.null}")
         Integer durationInMinutes
 

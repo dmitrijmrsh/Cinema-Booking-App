@@ -9,13 +9,13 @@ import cinema.management.app.hallservice.exception.CustomException;
 import cinema.management.app.hallservice.mapper.HallMapper;
 import cinema.management.app.hallservice.repository.HallRepository;
 import cinema.management.app.hallservice.service.HallService;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -40,7 +40,7 @@ public class HallServiceImpl implements HallService {
     }
 
     @Override
-    public List<HallResponseDto> findAllHallsWithCurrentActivityStatus(Boolean activityStatus) {
+    public List<HallResponseDto> findAllHallsWithCurrentActivityStatus(final Boolean activityStatus) {
         List<HallResponseDto> halls = hallRepository.findHallsByIsActive(activityStatus).stream()
                 .map(hallMapper::entityToDto)
                 .toList();
@@ -55,7 +55,7 @@ public class HallServiceImpl implements HallService {
     }
 
     @Override
-    public HallResponseDto findHallById(Integer id) {
+    public HallResponseDto findHallById(final Integer id) {
         Hall hall = findById(id);
 
         log.info("Found hall with id {}", hall.getId());
@@ -64,7 +64,7 @@ public class HallServiceImpl implements HallService {
     }
 
     @Override
-    public HallResponseDto saveHall(HallCreateRequestDto dto) {
+    public HallResponseDto saveHall(final HallCreateRequestDto dto) {
         Hall hall = hallRepository.save(hallMapper.dtoToEntity(dto));
 
         log.info("Saved hall with id {}", hall.getId());
@@ -74,14 +74,14 @@ public class HallServiceImpl implements HallService {
 
     @Override
     @Transactional
-    public HallResponseDto updateHall(Integer id, HallUpdateRequestDto dto) {
+    public HallResponseDto updateHall(final Integer id, final HallUpdateRequestDto dto) {
         Hall hall = findById(id);
 
         hall.setIsActive(dto.isActive());
         hall.setRowCount(dto.rowCount());
         hall.setSeatInRowCount(dto.seatInRowCount());
 
-        Hall updatedHall = hallRepository.save(hall);
+        Hall updatedHall = hallRepository.update(id, hall);
 
         log.info("Updated hall with id {}", updatedHall.getId());
 
@@ -90,12 +90,12 @@ public class HallServiceImpl implements HallService {
 
     @Override
     @Transactional
-    public HallResponseDto updateHallActivityStatus(Integer id, HallUpdateActivityStatusRequestDto dto) {
+    public HallResponseDto updateHallActivityStatus(final Integer id, final HallUpdateActivityStatusRequestDto dto) {
         Hall hall = findById(id);
 
         hall.setIsActive(dto.isActive());
 
-        Hall updatedHall = hallRepository.save(hall);
+        Hall updatedHall = hallRepository.update(id, hall);
 
         log.info(
                 "Updated activity status of hall with id {} for status {}",
@@ -108,13 +108,13 @@ public class HallServiceImpl implements HallService {
 
     @Override
     @Transactional
-    public void deleteHall(Integer id) {
+    public void deleteHall(final Integer id) {
         hallRepository.deleteById(id);
 
         log.info("Deleted hall with id {}", id);
     }
 
-    private Hall findById(Integer id) {
+    private Hall findById(final Integer id) {
         return hallRepository.findById(id)
                 .orElseThrow(() -> new CustomException(messageSource.getMessage(
                         "hall.service.errors.not.found.hall.by.id",

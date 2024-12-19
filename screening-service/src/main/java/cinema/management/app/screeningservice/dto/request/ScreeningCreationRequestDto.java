@@ -1,6 +1,5 @@
 package cinema.management.app.screeningservice.dto.request;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotNull;
 
@@ -16,11 +15,9 @@ public record ScreeningCreationRequestDto(
         @NotNull(message = "{screening.service.data.validation.time.is.null}")
         LocalTime time,
 
-        @JsonProperty("film_id")
         @NotNull(message = "{screening.service.data.validation.film.id.is.null}")
         Integer filmId,
 
-        @JsonProperty("hall_id")
         @NotNull(message = "{screening.service.data.validation.hall.id.is.null}")
         Integer hallId
 

@@ -1,16 +1,26 @@
 package cinema.management.app.filmservice.repository;
 
 import cinema.management.app.filmservice.entity.Film;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
-public interface FilmRepository extends JpaRepository<Film, Integer> {
+public interface FilmRepository {
 
-    @Query("SELECT f FROM Film f WHERE f.genre.name = :genre")
-    List<Film> findByGenreName(@Param("genre") String genre);
+    List<Film> findAll();
 
-    boolean existsByTitle(String title);
+    List<Film> findAllByGenreName(final String genreName);
+
+    Optional<Film> findById(final Integer id);
+
+    Boolean existsById(final Integer id);
+
+    Boolean existsByTitle(final String name);
+
+    Film save(final Film film);
+
+    Film update(final Integer id, final Film film);
+
+    void delete(final Integer id);
+
 }

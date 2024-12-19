@@ -25,9 +25,9 @@ public class HallsRestController {
         return hallService.findAllHalls();
     }
 
-    @GetMapping("/activity")
+    @GetMapping("/by-activeness")
     public List<HallResponseDto> findAllHallsWithCurrentActivityStatus(
-            @RequestParam(name = "is_active") Boolean activityStatus
+            @RequestParam(name = "is_active") final Boolean activityStatus
     ) {
         return hallService.findAllHallsWithCurrentActivityStatus(activityStatus);
     }

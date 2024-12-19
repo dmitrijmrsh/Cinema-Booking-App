@@ -1,0 +1,17 @@
+databaseChangeLog:
+  - changeSet:
+      id: 20241215_create_table
+      author: dmitriimrsh (generated)
+      comment: "Creates table for tickets"
+      changes:
+        - sqlFile:
+            path: 20241215_create_table.sql
+            relativeToChangelogFile: true
+  - changeSet:
+      id: 20241215_create_tickets_functions
+      author: dmitriimrsh (generated)
+      comment: "Creates tickets functions"
+      changes:
+        - sqlFile:
+            path: 20241215_create_tickets_functions.sql
+            relativeToChangelogFile: true

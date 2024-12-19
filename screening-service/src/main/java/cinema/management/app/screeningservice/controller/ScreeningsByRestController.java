@@ -16,12 +16,16 @@ public class ScreeningsByRestController {
     private final ScreeningService screeningService;
 
     @GetMapping("date")
-    List<ScreeningResponseDto> findScreeningsByDate(@RequestParam("date") LocalDate date) {
+    List<ScreeningResponseDto> findScreeningsByDate(
+            @RequestParam("date") final LocalDate date
+    ) {
         return screeningService.findScreeningsByDate(date);
     }
 
-    @GetMapping("film/{filmId:\\d+}")
-    List<ScreeningResponseDto> findScreeningsByFilmId(@PathVariable("filmId") Integer filmId) {
+    @GetMapping("film")
+    List<ScreeningResponseDto> findScreeningsByFilmId(
+            @RequestParam("filmId") final Integer filmId
+    ) {
         return screeningService.findScreeningsByFilmId(filmId);
     }
 

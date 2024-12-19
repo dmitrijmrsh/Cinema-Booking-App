@@ -18,14 +18,14 @@ public class FilmRestController {
     private final FilmService filmService;
 
     @GetMapping
-    public FilmResponseDto findFilmById(@PathVariable("filmId") Integer id) {
+    public FilmResponseDto findFilmById(@PathVariable("filmId") final Integer id) {
         return filmService.findFilmById(id);
     }
 
     @PutMapping
     public ResponseEntity<?> updateFilmById(
-            @PathVariable("filmId") Integer id,
-            @Valid @RequestBody FilmUpdateRequestDto dto,
+            @PathVariable("filmId") final Integer id,
+            @Valid @RequestBody final FilmUpdateRequestDto dto,
             BindingResult bindingResult
     ) throws BindException {
 
@@ -44,7 +44,7 @@ public class FilmRestController {
     }
 
     @DeleteMapping
-    public ResponseEntity<?> deleteFilmById(@PathVariable("filmId") Integer id) {
+    public ResponseEntity<?> deleteFilmById(@PathVariable("filmId") final Integer id) {
         filmService.deleteFilm(id);
         return ResponseEntity.noContent()
                 .build();

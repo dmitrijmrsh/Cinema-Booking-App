@@ -19,13 +19,15 @@ public class HallRestController {
     private final HallService hallService;
 
     @GetMapping
-    public HallResponseDto findHallById(@PathVariable("hallId") Integer hallId) {
+    public HallResponseDto findHallById(
+            @PathVariable("hallId") final Integer hallId
+    ) {
         return hallService.findHallById(hallId);
     }
 
     @PatchMapping
     public ResponseEntity<?> changeHallActivityStatus(
-            @PathVariable("hallId") Integer id,
+            @PathVariable("hallId") final Integer id,
             @Valid @RequestBody HallUpdateActivityStatusRequestDto dto,
             BindingResult bindingResult
     ) throws BindException {
@@ -46,7 +48,7 @@ public class HallRestController {
 
     @PutMapping
     public ResponseEntity<?> updateHallData(
-            @PathVariable("hallId") Integer id,
+            @PathVariable("hallId") final Integer id,
             @Valid @RequestBody HallUpdateRequestDto dto,
             BindingResult bindingResult
     ) throws BindException {
@@ -66,7 +68,9 @@ public class HallRestController {
     }
 
     @DeleteMapping
-    public ResponseEntity<?> deleteHall(@PathVariable("hallId") Integer id) {
+    public ResponseEntity<?> deleteHall(
+            @PathVariable("hallId") final Integer id
+    ) {
         hallService.deleteHall(id);
         return ResponseEntity.noContent()
                 .build();
